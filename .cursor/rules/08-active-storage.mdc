@@ -1,0 +1,22 @@
+---
+description: File uploads with Active Storage (cloud services, variants, direct uploads)
+globs:
+  - config/storage.yml
+  - app/models/**/*.rb
+  - app/views/**/*active_storage*.*
+---
+
+## Setup
+- Use Active Storage for file attachments; configure cloud services (e.g., S3) in `storage.yml` and credentials.
+
+## Usage
+```ruby
+class Post < ApplicationRecord
+  has_one_attached :cover_image
+end
+```
+
+## Serving & variants
+
+- Prefer proxy/redirect modes as appropriate; generate variants with built-in processors.
+- For direct uploads, use the built-in JS/S3 integrations and hook post-upload events for background processing.

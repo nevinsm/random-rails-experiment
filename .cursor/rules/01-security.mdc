@@ -1,0 +1,31 @@
+---
+description: Secure-by-default Rails (XSS, CSRF, SQLi, headers, params)
+alwaysApply: true
+---
+
+## Input & output
+- Escape output by default. Avoid `raw`/`html_safe`; if absolutely necessary, sanitize first:
+  ```ruby
+  sanitize(user_supplied_html, tags: %w[p br a], attributes: %w[href])
+  ```
+- Strong Parameters everywhere:
+  ```ruby
+  def user_params
+    params.require(:user).permit(:name, :email)
+  end
+  ```
+## CSRF & session
+
+- Do **not** disable CSRF on HTML controllers. APIs can use CSRF-exempt JSON endpoints explicitly.
+
+## Queries
+
+- Use AR bind parameters / query interface. Never build SQL via string interpolation.
+
+## Content Security Policy
+
+- Keep/enable CSP in `config/initializers/content_security_policy.rb`. Add only minimal allowances needed by the app.
+
+## Passwords & auth helpers
+
+- Use `has_secure_password` when rolling your own auth; store only `password_digest`; enforce 72-byte limit is handled by Rails/bcrypt.

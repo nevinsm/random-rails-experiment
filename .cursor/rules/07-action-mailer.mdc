@@ -1,0 +1,17 @@
+---
+description: Mailer guidelines (deliver_later, URL options, previews)
+globs:
+  - app/mailers/**/*.rb
+  - app/views/**/*mailer*.erb
+  - config/environments/*.rb
+---
+
+## Delivery
+- Default to `deliver_later` for non-blocking UX.
+- Set `config.action_mailer.default_url_options` per environment so generated links use the correct host (and protocol).
+- Maintain mailer previews for complex templates; test critical flows.
+
+```ruby
+# config/environments/production.rb
+config.action_mailer.default_url_options = { host: "example.com", protocol: "https" }
+```

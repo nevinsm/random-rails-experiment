@@ -1,0 +1,26 @@
+---
+description: Fragment/Russian-doll caching, cache keys, deployment tuning
+globs:
+  - app/views/**/*.erb
+  - app/controllers/**/*.rb
+  - config/puma.rb
+---
+
+## View caching
+- Use fragment caching around expensive blocks; prefer Russian-doll patterns when nesting lists/detail items.
+```erb
+<% cache @post do %>
+  <%= render @post %>
+  <% cache [@post, "comments"] do %>
+    <%= render @post.comments %>
+  <% end %>
+<% end %>
+```
+
+## Keys & expiration
+
+- Let Rails’ cache digests derive keys; avoid manual key mangling unless necessary.
+
+## Deployment tuning
+
+- Use Rails’ performance guide to size threads/workers and test concurrency with realistic load before production changes.

@@ -1,0 +1,19 @@
+---
+description: Safe, reversible, well-indexed migrations
+globs:
+  - db/migrate/**/*.rb
+---
+
+## Safety & reversibility
+- Prefer `def change` with reversible ops; fall back to explicit `up`/`down` for data moves.
+- Add appropriate indexes when adding FKs or frequently-filtered columns.
+- Don’t edit merged migrations—create new ones.
+- For multi-database apps, place migrations in the DB-specific paths and set `migrations_paths` as required.
+
+## Examples
+```ruby
+def change
+  add_column :orders, :status, :string, null: false, default: "pending"
+  add_index  :orders, :status
+end
+```

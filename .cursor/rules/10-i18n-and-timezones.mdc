@@ -1,0 +1,17 @@
+---
+description: Internationalization, localization, and time zones
+globs:
+  - config/application.rb
+  - config/locales/**/*.yml
+  - app/views/**/*.erb
+---
+
+## I18n
+- Use `I18n.t`/`I18n.l`; keep translations in `config/locales/*.yml`. Avoid inline strings for user-facing copy.
+
+## Time zones
+- Set `config.time_zone` to the app default; store in UTC (AR default) and convert for display.
+```ruby
+# config/application.rb
+config.time_zone = "America/New_York" # example
+```

@@ -1,0 +1,19 @@
+---
+description: Background jobs via Active Job (queues, retries, idempotency)
+globs:
+  - app/jobs/**/*.rb
+---
+
+## Adapter & queues
+- Use Rails’ Active Job; set adapter in env config and name queues explicitly:
+  ```ruby
+  queue_as :default
+  ```
+## Retries & idempotency
+
+- Use `retry_on` for transient exceptions; `discard_on` for known terminal errors.
+- Jobs should be idempotent (guard against duplicates & partial progress).
+
+## Mailers
+
+- Prefer `deliver_later` (see @07-action-mailer).

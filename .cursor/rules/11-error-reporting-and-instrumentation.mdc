@@ -1,0 +1,11 @@
+---
+description: First-class error reporting; instrument critical paths
+alwaysApply: true
+---
+
+## Error reporting
+- Use Rails’ error reporting hooks for exceptions; configure environments (`consider_all_requests_local`, reporters) appropriately.
+- Ensure 5xx errors are captured in production and surfaced to your APM/logs.
+
+## Instrumentation
+- Add notifications around critical operations (e.g., long queries, external calls) to aid debugging and SLOs; prefer framework hooks before custom code.

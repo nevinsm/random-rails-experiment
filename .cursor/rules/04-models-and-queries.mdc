@@ -1,0 +1,16 @@
+---
+description: Model design, validations, associations, and N+1 avoidance
+globs:
+  - app/models/**/*.rb
+---
+
+## Validations & associations
+- Use AR validations for invariants; mirror with DB constraints where applicable.
+- Declare associations explicitly and leverage `dependent:` semantics.
+
+## Querying & performance
+- Avoid N+1:
+  ```ruby
+  posts = Post.includes(:comments, :author).order(created_at: :desc)
+  ```
+- Prefer scopes/class methods that return ActiveRecord::Relation for composability.

@@ -1,0 +1,22 @@
+---
+description: RESTful routing, controller shape, strong params, status codes
+globs:
+  - app/controllers/**/*.rb
+  - config/routes.rb
+---
+
+## Routes
+- Prefer RESTful resource routes and limit surface area:
+  ```ruby
+  resources :users, only: %i[index show create update destroy]
+  ```
+
+## Controllers
+
+- Keep to: authN/authZ, orchestration, param whitelisting, rendering.
+- Always use Strong Parameters (see @01-security).
+- Respond with explicit status codes for non-happy paths:
+  ```ruby
+  render json: { error: "not found" }, status: :not_found
+  ```
+- Use respond_to for multi-format endpoints; default JSON uses render json: with serializers or to_json from POROs as last resort.

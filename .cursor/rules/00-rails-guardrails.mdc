@@ -1,0 +1,20 @@
+---
+description: Project-wide Rails conventions & safety rails
+alwaysApply: true
+---
+
+## Rails guardrails
+- Follow Rails conventions first (MVC, RESTful routes, thin controllers, fat models where business logic lives; avoid one-off patterns unless justified in comments).
+- Use framework defaults unless the repo explicitly overrides them.
+- Prefer `bin/rails` tasks over ad-hoc scripts; document any rake tasks in README.
+- All new code ships with tests (unit + request; add system tests for user flows). Use Rails’ built-in testing unless the repo already standardizes on RSpec. @test-examples.md
+- Never interpolate untrusted input into SQL; rely on Active Record query APIs/relations. (See @04-models-and-queries.)
+- Keep controllers lean: param whitelisting via Strong Parameters; render with explicit `status:` on non-200 outcomes. (See @03-routing-and-controllers.)
+- Security is non-negotiable: don’t disable CSRF on HTML controllers, escape output in views, and set CSP. (See @01-security.)
+
+## Pull request checklist
+- [ ] Migrations are reversible and indexed appropriately.
+- [ ] N+1s addressed (`includes`/`preload`) on list endpoints.
+- [ ] Background work uses Active Job with sensible `queue_as` and retries.
+- [ ] Mailers use `deliver_later` with `default_url_options` set.
+- [ ] Uploaded files use Active Storage; no custom S3 SDK usage in app code.
