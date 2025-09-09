@@ -1,0 +1,56 @@
+<h1>Organizations</h1>
+
+<p>
+  <%= link_to "Create Organization", new_organization_path %>
+  <% if Current.organization %>
+    | Current: <strong><%= Current.organization.name %></strong>
+  <% end %>
+  |
+  <%= form_with url: switch_organizations_path, method: :post, local: true do |f| %>
+    <%= select_tag :organization_id, options_from_collection_for_select(@organizations, :id, :name, Current.organization&.id) %>
+    <%= f.submit "Switch" %>
+  <% end %>
+  |
+  <%= link_to "Members", profile_path %>
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Slug</th>
+      <th>Owner</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @organizations.each do |org| %>
+      <tr>
+        <td><%= org.name %></td>
+        <td><%= org.slug %></td>
+        <td><%= org.owner.name.presence || org.owner.email %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if Current.organization %>
+  <h2>Members of <%= Current.organization.name %></h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% Current.organization.memberships.includes(:user).each do |membership| %>
+        <tr>
+          <td><%= membership.user.email %></td>
+          <td><%= membership.status %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+

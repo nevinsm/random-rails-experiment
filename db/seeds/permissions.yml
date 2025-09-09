@@ -1,0 +1,36 @@
+# Catalog of permissions. Loaded via rake task.
+# Each entry requires a unique key.
+
+- key: org.read
+  name: Read organization
+  description: View organization details and metadata
+
+- key: org.update
+  name: Update organization
+  description: Modify organization settings and metadata
+
+- key: member.read
+  name: Read members
+  description: View members of the organization
+
+- key: member.invite
+  name: Invite members
+  description: Invite new members to the organization
+
+- key: member.manage
+  name: Manage members
+  description: Manage member roles and status
+
+- key: role.read
+  name: Read roles
+  description: View roles and their permissions
+
+- key: role.manage
+  name: Manage roles
+  description: Create, update, and delete roles and their permissions
+
+- key: audit.read
+  name: Read audit logs
+  description: View the audit logs for the organization
+
+

@@ -1,0 +1,19 @@
+<h1>New Organization</h1>
+
+<%= form_with model: @organization, local: true do |f| %>
+  <div>
+    <%= f.label :name %><br>
+    <%= f.text_field :name, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :slug %> (optional)<br>
+    <%= f.text_field :slug %>
+  </div>
+
+  <div>
+    <%= f.submit "Create Organization" %>
+  </div>
+<% end %>
+
+

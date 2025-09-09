@@ -23,6 +23,43 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header>
+      <nav>
+        <% if user_signed_in? %>
+          <span>Signed in as <%= current_user.name.presence || current_user.email %></span>
+          |
+          <%= render "shared/org_switcher" %>
+          |
+          <%= link_to "Home", root_path %>
+          |
+          <%= link_to "Organizations", organizations_path %>
+          |
+          <%= link_to "Profile", profile_path %>
+          |
+          <%= link_to "Edit account", edit_user_registration_path %>
+          |
+          <%= button_to "Sign out", destroy_user_session_path, method: :delete %>
+        <% else %>
+          <%= link_to "Home", root_path %>
+          |
+          <%= link_to "Sign in", new_user_session_path %>
+          |
+          <%= link_to "Sign up", new_user_registration_path %>
+        <% end %>
+      </nav>
+    </header>
+
+    <div id="flash" data-turbo-temporary>
+      <% if notice %>
+        <p class="notice"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="alert"><%= alert %></p>
+      <% end %>
+    </div>
+
+    <main>
+      <%= yield %>
+    </main>
   </body>
 </html>

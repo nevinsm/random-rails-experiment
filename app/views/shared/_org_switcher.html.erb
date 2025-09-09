@@ -1,0 +1,11 @@
+<% if user_signed_in? %>
+  <div>
+    <% orgs = Organization.joins(:memberships).where(memberships: { user_id: current_user.id }).distinct %>
+    <%= form_with url: switch_organizations_path, method: :post, local: true do |f| %>
+      <%= select_tag :organization_id, options_from_collection_for_select(orgs, :id, :name, Current.organization&.id) %>
+      <%= f.submit "Switch" %>
+    <% end %>
+  </div>
+<% end %>
+
+
