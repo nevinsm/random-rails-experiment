@@ -1,7 +1,9 @@
 <h1>Organizations</h1>
 
 <p>
-  <%= link_to "Create Organization", new_organization_path %>
+  <% if policy(Organization).create? %>
+    <%= link_to "Create Organization", new_organization_path %>
+  <% end %>
   <% if Current.organization %>
     | Current: <strong><%= Current.organization.name %></strong>
   <% end %>
@@ -11,7 +13,9 @@
     <%= f.submit "Switch" %>
   <% end %>
   |
-  <%= link_to "Members", profile_path %>
+  <% if can?("member.read") %>
+    <%= link_to "Members", profile_path %>
+  <% end %>
 </p>
 
 <table>
@@ -33,7 +37,7 @@
   </tbody>
 </table>
 
-<% if Current.organization %>
+<% if Current.organization && can?("member.read") %>
   <h2>Members of <%= Current.organization.name %></h2>
   <table>
     <thead>

@@ -7,10 +7,12 @@ class OrganizationsController < ApplicationController
   end
 
   def new
+    authorize Organization
     @organization = Organization.new
   end
 
   def create
+    authorize Organization
     @organization = Organization.new(organization_params)
     @organization.owner = current_user
 

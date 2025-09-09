@@ -1,0 +1,15 @@
+<h1>Action not allowed</h1>
+<p>You don’t have permission to perform this action.</p>
+<p>
+  <%= link_to "Go back", (request.referer.presence || root_path) %>
+  <% if Current.organization %>
+    | <%= link_to "Back to #{Current.organization.name}", organizations_path(organization_id: Current.organization.id) %>
+  <% end %>
+  | <%= link_to "Home", root_path %>
+  | <%= link_to "Organizations", organizations_path %>
+  <% if user_signed_in? %>
+    | <%= link_to "Profile", profile_path %>
+  <% end %>
+ </p>
+
+

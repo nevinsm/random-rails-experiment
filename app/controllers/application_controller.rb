@@ -4,9 +4,11 @@ class ApplicationController < ActionController::Base
 
   include Pundit::Authorization
   include SetsCurrentOrganization
+  include PermissionCheck
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_current_user
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   protected
 
@@ -19,5 +21,14 @@ class ApplicationController < ActionController::Base
 
   def set_current_user
     Current.user = current_user
+  end
+
+  def user_not_authorized
+    respond_to do |format|
+      format.html do
+        render template: "errors/forbidden", status: :forbidden
+      end
+      format.any { head :forbidden }
+    end
   end
 end
