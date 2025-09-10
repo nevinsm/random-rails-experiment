@@ -12,13 +12,34 @@
       <% assigned = membership.roles.exists?(id: role.id) %>
       <% if assigned %>
         <% if policy(:member).update? %>
-          <%= button_to role.name, admin_membership_role_path, method: :delete, params: { membership_id: membership.id, role_id: role.id }, form: { data: { turbo_confirm: "Remove role #{role.name}?" } }, class: "chip chip--assigned" %>
+          <%= button_to admin_membership_role_path,
+                method: :delete,
+                params: { membership_id: membership.id, role_id: role.id },
+                form: { data: { turbo_confirm: "Remove role #{role.name}?" } },
+                class: "chip chip--assigned",
+                title: "Assigned: #{role.name}",
+                aria: { label: "Remove role #{role.name} from #{membership.user.email}" } do %>
+            ✓ <span class="chip__text"><%= role.name %></span>
+          <% end %>
         <% else %>
-          <span class="chip chip--assigned"><%= role.name %></span>
+          <span class="chip chip--assigned" title="Assigned: <%= role.name %>" aria-label="Role <%= role.name %> assigned">
+            ✓ <span class="chip__text"><%= role.name %></span>
+          </span>
         <% end %>
       <% else %>
         <% if policy(:member).update? %>
-          <%= button_to role.name, admin_membership_roles_path, method: :post, params: { membership_id: membership.id, role_id: role.id }, class: "chip" %>
+          <%= button_to admin_membership_roles_path,
+                method: :post,
+                params: { membership_id: membership.id, role_id: role.id },
+                class: "chip chip--unassigned",
+                title: "Not assigned: #{role.name}",
+                aria: { label: "Assign role #{role.name} to #{membership.user.email}" } do %>
+            + <span class="chip__text"><%= role.name %></span>
+          <% end %>
+        <% else %>
+          <span class="chip chip--unassigned" title="Not assigned: <%= role.name %>" aria-label="Role <%= role.name %> not assigned">
+            + <span class="chip__text"><%= role.name %></span>
+          </span>
         <% end %>
       <% end %>
     <% end %>

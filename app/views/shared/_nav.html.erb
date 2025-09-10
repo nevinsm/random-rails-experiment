@@ -1,0 +1,39 @@
+<% if user_signed_in? %>
+  <span>Signed in as <%= current_user.name.presence || current_user.email %></span>
+  |
+  <%= render "shared/org_switcher" %>
+  |
+  <%= link_to "Home", root_path %>
+  |
+  <%= link_to "Organizations", organizations_path %>
+  |
+  <% if policy(:member).index? || policy(Role).index? || policy(:audit).index? %>
+    Admin:
+    <% if policy(:member).index? %>
+      <%= link_to "Members", admin_members_path %>
+    <% end %>
+    <% if policy(Role).index? %>
+      <% if policy(:member).index? %>|<% end %>
+      <%= link_to "Roles", admin_roles_path %>
+    <% end %>
+    <% if policy(:audit).index? %>
+      <% if policy(:member).index? || policy(Role).index? %>|<% end %>
+      <%= link_to "Audit Logs", admin_audit_logs_path %>
+    <% end %>
+    |
+  <% end %>
+  
+  <%= link_to "Profile", profile_path %>
+  |
+  <%= link_to "Edit account", edit_user_registration_path %>
+  |
+  <%= button_to "Sign out", destroy_user_session_path, method: :delete %>
+<% else %>
+  <%= link_to "Home", root_path %>
+  |
+  <%= link_to "Sign in", new_user_session_path %>
+  |
+  <%= link_to "Sign up", new_user_registration_path %>
+<% end %>
+
+

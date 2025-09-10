@@ -1,6 +1,6 @@
 <turbo-stream action="append" target="members">
   <template>
-    <%= render partial: "member", locals: { membership: @membership, roles: @roles } %>
+    <%= render partial: "member", formats: :html, locals: { membership: @membership, roles: @roles } %>
   </template>
 </turbo-stream>
 

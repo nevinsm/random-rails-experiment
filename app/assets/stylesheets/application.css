@@ -8,3 +8,43 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* Member role chips */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1; /* slate-300 */
+  background: #f8fafc; /* slate-50 */
+  color: #0f172a; /* slate-900 */
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.chip__text {
+  line-height: 1;
+}
+
+.chip--assigned {
+  border-color: #10b981; /* emerald-500 */
+  background: #ecfdf5; /* emerald-50 */
+  color: #065f46; /* emerald-800 */
+}
+
+.chip--unassigned {
+  border-color: #cbd5e1; /* slate-300 */
+  background: #ffffff;
+  color: #334155; /* slate-700 */
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #e2e8f0; /* slate-200 */
+  color: #0f172a; /* slate-900 */
+  font-size: 12px;
+}
