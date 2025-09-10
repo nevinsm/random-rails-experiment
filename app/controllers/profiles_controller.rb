@@ -11,7 +11,7 @@ class ProfilesController < ApplicationController
       redirect_to profile_path, notice: "Profile updated."
     else
       flash.now[:alert] = "Could not update profile."
-      render :show, status: :unprocessable_entity
+      render :show, status: :unprocessable_content
     end
   end
 

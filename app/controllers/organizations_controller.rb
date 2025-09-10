@@ -22,7 +22,7 @@ class OrganizationsController < ApplicationController
       redirect_to organizations_path(organization_id: @organization.id), notice: "Organization created."
     else
       flash.now[:alert] = "Could not create organization."
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

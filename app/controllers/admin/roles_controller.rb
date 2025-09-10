@@ -37,8 +37,8 @@ class Admin::RolesController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :new, status: :unprocessable_entity }
-        format.turbo_stream { render :new, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.turbo_stream { render :new, status: :unprocessable_content }
       end
     end
   end
@@ -66,8 +66,8 @@ class Admin::RolesController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessable_entity }
-        format.turbo_stream { render :edit, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.turbo_stream { render :edit, status: :unprocessable_content }
       end
     end
   end

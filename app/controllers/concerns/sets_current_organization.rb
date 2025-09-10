@@ -7,7 +7,7 @@ module SetsCurrentOrganization
 
   private
 
-  def set_current_organization
+  def set_current_organization(*_args, **_kwargs, &_block)
     return unless current_user
 
     organization = find_organization_from_params || find_organization_from_user

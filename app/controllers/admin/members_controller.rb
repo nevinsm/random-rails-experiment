@@ -62,7 +62,7 @@ class Admin::MembersController < ApplicationController
       format.html { redirect_to admin_members_path, alert: e.record.errors.full_messages.to_sentence }
       format.turbo_stream do
         @error_message = e.record.errors.full_messages.to_sentence
-        render :index, status: :unprocessable_entity
+        render :index, status: :unprocessable_content
       end
     end
   end
@@ -79,7 +79,7 @@ class Admin::MembersController < ApplicationController
     else
       respond_to do |format|
         format.html { redirect_to admin_members_path, alert: @membership.errors.full_messages.to_sentence }
-        format.turbo_stream { head :unprocessable_entity }
+        format.turbo_stream { head :unprocessable_content }
       end
     end
   end

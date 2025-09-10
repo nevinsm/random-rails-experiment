@@ -23,4 +23,32 @@ class User < ApplicationRecord
       .where(permissions: { key: key })
       .exists?
   end
+
+  # Be tolerant to varying session serialization shapes across middleware stacks
+  def self.serialize_into_session(record)
+    [record.id, (record.respond_to?(:authenticatable_salt) ? record.authenticatable_salt : nil)]
+  end
+
+  def self.serialize_from_session(*args)
+    Rails.logger.warn("serialize_from_session args_len=#{args.length} args=#{args.inspect}") if Rails.env.test?
+    # Case 1: Devise passes id and optional salt
+    if args.length <= 2 && !(args.first.is_a?(Array))
+      id = args[0]
+      salt = args[1]
+      user = find_by(id: id)
+      return nil unless user
+      return user if salt.nil? || !user.respond_to?(:authenticatable_salt) || user.authenticatable_salt == salt
+      return nil
+    end
+
+    # Case 2: Warden/Devise passed a list of key/value pairs like [ ["id", 1], ["email", ...], ... ]
+    if args.all? { |arg| arg.is_a?(Array) && arg.size == 2 }
+      attr_hash = args.to_h
+      id = attr_hash["id"] || attr_hash[:id]
+      return find_by(id: id)
+    end
+
+    nil
+  end
+
 end

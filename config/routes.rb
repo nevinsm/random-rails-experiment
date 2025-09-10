@@ -29,6 +29,22 @@ Rails.application.routes.draw do
     resources :audit_logs, only: [:index]
   end
 
+  # API v1 namespace
+  namespace :api do
+    namespace :v1 do
+      defaults format: :json do
+        resources :roles, only: [:index, :create, :update, :destroy]
+        resources :members, only: [:index, :create, :update] do
+          member do
+            post :roles, to: "membership_roles#create"
+            delete "roles/:role_id", to: "membership_roles#destroy"
+          end
+        end
+        resources :audit_logs, only: [:index]
+      end
+    end
+  end
+
   # Defines the root path route ("/")
   root "home#index"
 end
