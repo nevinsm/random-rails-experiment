@@ -7,17 +7,17 @@
   |
   <%= link_to "Organizations", organizations_path %>
   |
-  <% if policy(:member).index? || policy(Role).index? || policy(:audit).index? %>
+  <% if can?("member.read") || can?("role.manage") || can?("audit.read") %>
     Admin:
-    <% if policy(:member).index? %>
+    <% if can?("member.read") %>
       <%= link_to "Members", admin_members_path %>
     <% end %>
-    <% if policy(Role).index? %>
-      <% if policy(:member).index? %>|<% end %>
+    <% if can?("role.manage") %>
+      <% if can?("member.read") %>|<% end %>
       <%= link_to "Roles", admin_roles_path %>
     <% end %>
-    <% if policy(:audit).index? %>
-      <% if policy(:member).index? || policy(Role).index? %>|<% end %>
+    <% if can?("audit.read") %>
+      <% if can?("member.read") || can?("role.manage") %>|<% end %>
       <%= link_to "Audit Logs", admin_audit_logs_path %>
     <% end %>
     |

@@ -14,7 +14,9 @@
   <p>
     <%= link_to "Back", admin_roles_path %>
     <% unless @role.system? %>
-      | <%= link_to "Edit", edit_admin_role_path(@role) %>
+      <% if policy(@role).update? %>
+        | <%= link_to "Edit", edit_admin_role_path(@role) %>
+      <% end %>
     <% end %>
   </p>
 </div>
