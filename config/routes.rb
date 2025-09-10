@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     resources :members, only: [:index, :create, :destroy]
     resources :membership_roles, only: [:create]
     resource :membership_role, only: [:destroy], controller: "membership_roles"
+    resources :audit_logs, only: [:index]
   end
 
   # Defines the root path route ("/")

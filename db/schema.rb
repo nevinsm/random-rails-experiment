@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_09_181040) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_10_120010) do
+  create_table "audit_events", force: :cascade do |t|
+    t.integer "organization_id", null: false
+    t.integer "actor_id", null: false
+    t.string "event_type", null: false
+    t.string "resource_type", null: false
+    t.bigint "resource_id", null: false
+    t.json "metadata", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.index ["actor_id"], name: "index_audit_events_on_actor_id"
+    t.index ["event_type"], name: "index_audit_events_on_event_type"
+    t.index ["organization_id", "created_at"], name: "index_audit_events_on_organization_id_and_created_at"
+    t.index ["organization_id"], name: "index_audit_events_on_organization_id"
+    t.index ["resource_type", "resource_id"], name: "index_audit_events_on_resource_type_and_resource_id"
+  end
+
   create_table "membership_roles", force: :cascade do |t|
     t.integer "membership_id", null: false
     t.integer "role_id", null: false
@@ -89,6 +104,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_09_181040) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.bigint "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.text "object_changes"
+    t.datetime "created_at", null: false
+    t.index ["created_at"], name: "index_versions_on_created_at"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
+  add_foreign_key "audit_events", "organizations"
+  add_foreign_key "audit_events", "users", column: "actor_id"
   add_foreign_key "membership_roles", "memberships"
   add_foreign_key "membership_roles", "roles"
   add_foreign_key "memberships", "organizations"

@@ -26,6 +26,11 @@ class Admin::RolesController < ApplicationController
 
     if @role.save
       assign_permissions(@role)
+      AuditLogger.log(
+        event_type: "role.created",
+        resource: @role,
+        metadata: { after: @role.attributes, ip: request.remote_ip }
+      )
       respond_to do |format|
         format.html { redirect_to admin_roles_path, notice: "Role created." }
         format.turbo_stream
@@ -47,8 +52,14 @@ class Admin::RolesController < ApplicationController
     @role = find_role
     authorize @role
 
+    before_attrs = @role.attributes
     if @role.update(role_params.except(:permission_ids))
       assign_permissions(@role)
+      AuditLogger.log(
+        event_type: "role.updated",
+        resource: @role,
+        metadata: { before: before_attrs, after: @role.attributes, ip: request.remote_ip }
+      )
       respond_to do |format|
         format.html { redirect_to admin_roles_path, notice: "Role updated." }
         format.turbo_stream
@@ -73,7 +84,13 @@ class Admin::RolesController < ApplicationController
       return redirect_to admin_roles_path, alert: "Role is assigned to members and cannot be deleted."
     end
 
+    before_attrs = @role.attributes
     @role.destroy!
+    AuditLogger.log(
+      event_type: "role.deleted",
+      resource: @role,
+      metadata: { before: before_attrs, ip: request.remote_ip }
+    )
     respond_to do |format|
       format.html { redirect_to admin_roles_path, notice: "Role deleted." }
       format.turbo_stream

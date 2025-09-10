@@ -6,7 +6,12 @@ class Admin::MembershipRolesController < ApplicationController
     authorize membership, policy_class: MemberPolicy
 
     role = Current.organization.roles.find(params[:role_id])
-    MembershipRole.create!(membership: membership, role: role)
+    membership_role = MembershipRole.create!(membership: membership, role: role)
+    AuditLogger.log(
+      event_type: "member.role_assigned",
+      resource: membership_role,
+      metadata: { after: { membership_id: membership.id, role_id: role.id }, ip: request.remote_ip }
+    )
 
     respond_to do |format|
       format.html { redirect_to admin_members_path, notice: "Role assigned." }
@@ -22,6 +27,11 @@ class Admin::MembershipRolesController < ApplicationController
     authorize membership_role.membership, policy_class: MemberPolicy
 
     membership_role.destroy!
+    AuditLogger.log(
+      event_type: "member.role_unassigned",
+      resource: membership_role,
+      metadata: { before: { membership_id: membership_role.membership_id, role_id: membership_role.role_id }, ip: request.remote_ip }
+    )
     respond_to do |format|
       format.html { redirect_to admin_members_path, notice: "Role removed." }
       format.turbo_stream do

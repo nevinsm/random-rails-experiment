@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
 
   def set_current_user
     Current.user = current_user
+    PaperTrail.request.whodunnit = current_user&.id&.to_s
   end
 
   def user_not_authorized

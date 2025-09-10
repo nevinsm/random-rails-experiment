@@ -1,4 +1,5 @@
 class MembershipRole < ApplicationRecord
+  has_paper_trail
   belongs_to :membership
   belongs_to :role
 

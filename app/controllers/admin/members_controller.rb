@@ -30,6 +30,11 @@ class Admin::MembersController < ApplicationController
       elsif user
         membership = Current.organization.memberships.create!(user: user, status: "active")
         notice = "Member added."
+        AuditLogger.log(
+          event_type: "member.added",
+          resource: membership,
+          metadata: { after: { user_id: user.id, organization_id: Current.organization.id }, ip: request.remote_ip }
+        )
       else
         # Stub invitation flow: create a user now with random password
         random_password = SecureRandom.base58(16)
@@ -37,6 +42,11 @@ class Admin::MembersController < ApplicationController
         membership = Current.organization.memberships.create!(user: user, status: "invited", invited_by: current_user)
         MemberMailer.invitation_email(membership).deliver_later
         notice = "Invitation sent (stub)."
+        AuditLogger.log(
+          event_type: "member.invited",
+          resource: membership,
+          metadata: { after: { user_id: user.id, organization_id: Current.organization.id }, ip: request.remote_ip }
+        )
       end
 
       respond_to do |format|
@@ -78,7 +88,13 @@ class Admin::MembersController < ApplicationController
     @membership = find_membership
     authorize @membership, policy_class: MemberPolicy
 
+    before_attrs = @membership.attributes
     @membership.destroy!
+    AuditLogger.log(
+      event_type: "member.removed",
+      resource: @membership,
+      metadata: { before: before_attrs, ip: request.remote_ip }
+    )
     respond_to do |format|
       format.html { redirect_to admin_members_path, notice: "Member removed." }
       format.turbo_stream

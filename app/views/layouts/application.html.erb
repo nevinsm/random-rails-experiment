@@ -34,7 +34,7 @@
           |
           <%= link_to "Organizations", organizations_path %>
           |
-          <% if policy(:member).index? || policy(Role).index? %>
+          <% if policy(:member).index? || policy(Role).index? || policy(:audit).index? %>
             Admin:
             <% if policy(:member).index? %>
               <%= link_to "Members", admin_members_path %>
@@ -42,6 +42,10 @@
             <% if policy(Role).index? %>
               <% if policy(:member).index? %>|<% end %>
               <%= link_to "Roles", admin_roles_path %>
+            <% end %>
+            <% if policy(:audit).index? %>
+              <% if policy(:member).index? || policy(Role).index? %>|<% end %>
+              <%= link_to "Audit Logs", admin_audit_logs_path %>
             <% end %>
             |
           <% end %>

@@ -1,4 +1,5 @@
 class Role < ApplicationRecord
+  has_paper_trail
   belongs_to :organization
 
   has_many :role_permissions, dependent: :destroy

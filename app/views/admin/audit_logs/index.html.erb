@@ -1,0 +1,56 @@
+<h1>Audit Log</h1>
+
+<%= form_with url: admin_audit_logs_path, method: :get, local: true do |f| %>
+  <div>
+    <label>Actor</label>
+    <%= text_field_tag :actor_id, params[:actor_id], placeholder: "User ID" %>
+  </div>
+  <div>
+    <label>Event Type</label>
+    <%= text_field_tag :event_type, params[:event_type] %>
+  </div>
+  <div>
+    <label>Resource Type</label>
+    <%= text_field_tag :resource_type, params[:resource_type] %>
+  </div>
+  <div>
+    <label>Resource ID</label>
+    <%= text_field_tag :resource_id, params[:resource_id] %>
+  </div>
+  <div>
+    <label>From</label>
+    <%= date_field_tag :from, params[:from] %>
+  </div>
+  <div>
+    <label>To</label>
+    <%= date_field_tag :to, params[:to] %>
+  </div>
+  <div>
+    <%= submit_tag "Filter" %>
+  </div>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>Actor</th>
+      <th>Event</th>
+      <th>Resource</th>
+      <th>Metadata</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @events.each do |e| %>
+      <tr>
+        <td><%= e.created_at.in_time_zone.to_fs(:db) %></td>
+        <td><%= e.actor&.email %></td>
+        <td><%= e.event_type %></td>
+        <td><%= "#{e.resource_type}##{e.resource_id}" %></td>
+        <td><pre><%= JSON.pretty_generate(e.metadata.as_json) %></pre></td>
+      </tr>
+    <% end %>
+  </tbody>
+  </table>
+
+
