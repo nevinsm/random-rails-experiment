@@ -34,6 +34,19 @@
           |
           <%= link_to "Organizations", organizations_path %>
           |
+          <% if policy(:member).index? || policy(Role).index? %>
+            Admin:
+            <% if policy(:member).index? %>
+              <%= link_to "Members", admin_members_path %>
+            <% end %>
+            <% if policy(Role).index? %>
+              <% if policy(:member).index? %>|<% end %>
+              <%= link_to "Roles", admin_roles_path %>
+            <% end %>
+            |
+          <% end %>
+          
+          
           <%= link_to "Profile", profile_path %>
           |
           <%= link_to "Edit account", edit_user_registration_path %>

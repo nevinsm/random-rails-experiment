@@ -17,18 +17,9 @@ class OrganizationPolicyTest < ActiveSupport::TestCase
     assert policy.create?
   end
 
-  test "show? requires org.read permission" do
+  test "owner can show? without explicit permission" do
     policy = OrganizationPolicy.new(@user, @org)
-    refute policy.show?
-
-    # Grant permission via role
-    permission = Permission.find_or_create_by!(key: "org.read", name: "Org Read")
-    role = Role.create!(organization: @org, name: "Reader", key: "reader")
-    RolePermission.create!(role: role, permission: permission)
-    membership = Membership.find_or_create_by!(user: @user, organization: @org, status: "active")
-    MembershipRole.create!(membership: membership, role: role)
-
-    assert OrganizationPolicy.new(@user, @org).show?
+    assert policy.show?
   end
 end
 

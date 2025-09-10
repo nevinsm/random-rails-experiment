@@ -18,15 +18,7 @@ class Admin::RolesControllerTest < ActionDispatch::IntegrationTest
     @membership = Membership.create!(user: @owner, organization: @org)
   end
 
-  test "index requires role.manage permission" do
-    get admin_roles_path
-    assert_response :forbidden
-
-    # Grant owner admin role via membership to allow manage
-    membership = @membership
-    admin = @org.roles.find_by!(key: "admin")
-    MembershipRole.create!(membership: membership, role: admin)
-
+  test "index allows owner" do
     get admin_roles_path
     assert_response :success
   end

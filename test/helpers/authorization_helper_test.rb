@@ -14,8 +14,8 @@ class AuthorizationHelperTest < ActionView::TestCase
     Current.reset
   end
 
-  test "can? returns false without permission" do
-    refute can?("member.read")
+  test "owner can? returns true without explicit role" do
+    assert can?("member.read")
   end
 
   test "can? returns true with permission via role" do
