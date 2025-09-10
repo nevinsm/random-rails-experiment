@@ -1,0 +1,33 @@
+<tr id="membership_<%= membership.id %>">
+  <td><%= membership.user.email %></td>
+  <td>
+    <% if membership.status == "invited" %>
+      <span class="badge">Invited</span>
+    <% else %>
+      <span class="badge">Active</span>
+    <% end %>
+  </td>
+  <td>
+    <% roles.each do |role| %>
+      <% assigned = membership.roles.exists?(id: role.id) %>
+      <% if assigned %>
+        <% if policy(:member).update? %>
+          <%= button_to role.name, admin_membership_role_path, method: :delete, params: { membership_id: membership.id, role_id: role.id }, form: { data: { turbo_confirm: "Remove role #{role.name}?" } }, class: "chip chip--assigned" %>
+        <% else %>
+          <span class="chip chip--assigned"><%= role.name %></span>
+        <% end %>
+      <% else %>
+        <% if policy(:member).update? %>
+          <%= button_to role.name, admin_membership_roles_path, method: :post, params: { membership_id: membership.id, role_id: role.id }, class: "chip" %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </td>
+  <td>
+    <% if policy(:member).destroy? %>
+      <%= button_to "Remove", admin_member_path(membership), method: :delete, data: { turbo_confirm: "Remove this member?" } %>
+    <% end %>
+  </td>
+</tr>
+
+

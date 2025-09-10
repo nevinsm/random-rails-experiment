@@ -1,0 +1,29 @@
+<div class="container">
+  <h1>Members</h1>
+
+  <div class="actions">
+    <% if policy(:member).create? %>
+      <%= form_with url: admin_members_path, method: :post, local: true do |f| %>
+        <%= f.label :email, "Add member by email" %>
+        <%= f.email_field :email, name: "member[email]", required: true %>
+        <%= f.submit "Invite/Add" %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Status</th>
+        <th>Roles</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="members">
+      <%= render partial: "member", collection: @memberships, as: :membership, locals: { roles: @roles } %>
+    </tbody>
+  </table>
+</div>
+
+

@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   # Admin namespace
   namespace :admin do
     resources :roles
+    resources :members, only: [:index, :create, :destroy]
+    resources :membership_roles, only: [:create]
+    resource :membership_role, only: [:destroy], controller: "membership_roles"
   end
 
   # Defines the root path route ("/")

@@ -1,0 +1,7 @@
+<turbo-stream action="replace" target="membership_<%= @membership.id %>">
+  <template>
+    <%= render partial: "admin/members/member", locals: { membership: @membership, roles: @roles } %>
+  </template>
+</turbo-stream>
+
+
