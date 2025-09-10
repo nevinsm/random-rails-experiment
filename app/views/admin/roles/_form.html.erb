@@ -1,0 +1,21 @@
+<%= form_with model: [:admin, @role], data: { turbo_frame: "modal" } do |f| %>
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :key %>
+    <%= f.text_field :key, required: true %>
+  </div>
+
+  <%# System roles are not editable via this form %>
+
+  <%= render "permission_checklist", f: f, role: @role %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+

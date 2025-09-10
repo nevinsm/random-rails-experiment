@@ -1,0 +1,22 @@
+<div data-controller="permission-checklist">
+  <div class="actions">
+    <button type="button" data-action="permission-checklist#selectAll">Select all</button>
+    <button type="button" data-action="permission-checklist#selectNone">None</button>
+  </div>
+
+  <div class="permissions">
+    <% Permission.order(:name).each do |perm| %>
+      <div>
+        <label>
+          <%= check_box_tag "role[permission_ids][]", perm.id, @role.permissions.exists?(perm.id), data: { "permission-checklist-target": "checkbox" } %>
+          <strong><%= perm.name %></strong>
+          <small>(<%= perm.key %>)</small>
+        </label>
+      </div>
+    <% end %>
+  </div>
+
+  <%= hidden_field_tag "role[permission_ids][]", "" %>
+</div>
+
+

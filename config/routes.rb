@@ -20,6 +20,11 @@ Rails.application.routes.draw do
     end
   end
 
+  # Admin namespace
+  namespace :admin do
+    resources :roles
+  end
+
   # Defines the root path route ("/")
   root "home#index"
 end

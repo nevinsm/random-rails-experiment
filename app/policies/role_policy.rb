@@ -14,10 +14,12 @@ class RolePolicy < ApplicationPolicy
   end
 
   def update?
+    return false if record.system?
     allow?("role.manage")
   end
 
   def destroy?
+    # Allow access to the action; controller enforces system-role guardrails
     allow?("role.manage")
   end
 end

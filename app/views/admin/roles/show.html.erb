@@ -1,0 +1,22 @@
+<div>
+  <h2><%= @role.name %></h2>
+  <% if @role.system? %>
+    <p><span class="badge">System</span></p>
+  <% end %>
+
+  <h3>Permissions</h3>
+  <ul>
+    <% @role.permissions.order(:name).each do |perm| %>
+      <li><%= perm.name %> (<%= perm.key %>)</li>
+    <% end %>
+  </ul>
+
+  <p>
+    <%= link_to "Back", admin_roles_path %>
+    <% unless @role.system? %>
+      | <%= link_to "Edit", edit_admin_role_path(@role) %>
+    <% end %>
+  </p>
+</div>
+
+
