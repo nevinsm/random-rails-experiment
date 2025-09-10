@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_10_120010) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_10_123000) do
   create_table "audit_events", force: :cascade do |t|
     t.integer "organization_id", null: false
     t.integer "actor_id", null: false
@@ -118,12 +118,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_10_120010) do
 
   add_foreign_key "audit_events", "organizations"
   add_foreign_key "audit_events", "users", column: "actor_id"
-  add_foreign_key "membership_roles", "memberships"
-  add_foreign_key "membership_roles", "roles"
+  add_foreign_key "membership_roles", "memberships", on_delete: :cascade
+  add_foreign_key "membership_roles", "roles", on_delete: :cascade
   add_foreign_key "memberships", "organizations"
   add_foreign_key "memberships", "users"
   add_foreign_key "organizations", "users", column: "owner_id"
-  add_foreign_key "role_permissions", "permissions"
-  add_foreign_key "role_permissions", "roles"
+  add_foreign_key "role_permissions", "permissions", on_delete: :cascade
+  add_foreign_key "role_permissions", "roles", on_delete: :cascade
   add_foreign_key "roles", "organizations"
 end

@@ -10,6 +10,41 @@ class Admin::MembersControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
+    @owner = User.create!(email: "owner@example.com", password: "password")
+    @org = Organization.create!(name: "Acme", owner: @owner)
+    sign_in @owner, scope: :user
+    @owner.update!(last_active_organization_id: @org.id)
+  end
+
+  test "index 200 for owner, 403 for viewer" do
+    get admin_members_path
+    assert_response :success
+
+    sign_out @owner
+    viewer = User.create!(email: "viewer@example.com", password: "password")
+    Membership.create!(user: viewer, organization: @org)
+    sign_in viewer, scope: :user
+    @org.roles.find_by!(key: "viewer").tap do |role|
+      MembershipRole.create!(membership: viewer.memberships.find_by!(organization: @org), role: role)
+    end
+
+    get admin_members_path
+    assert_response :forbidden
+  end
+end
+
+require "test_helper"
+
+class Admin::MembersControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    yaml_path = Rails.root.join("db", "seeds", "permissions.yml")
+    YAML.load_file(yaml_path).each do |attrs|
+      Permission.find_or_create_by!(key: attrs["key"]) do |p|
+        p.name = attrs["name"]
+        p.description = attrs["description"]
+      end
+    end
+
     @owner = User.create!(email: "owner2@example.com", password: "password")
     @org = Organization.create!(name: "Zeta", owner: @owner)
     sign_in @owner, scope: :user

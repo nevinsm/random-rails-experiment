@@ -23,6 +23,16 @@ class Admin::RolesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "index forbids viewer" do
+    sign_out @owner
+    viewer = User.create!(email: "viewer@example.com", password: "password")
+    m = Membership.create!(user: viewer, organization: @org)
+    MembershipRole.create!(membership: m, role: @org.roles.find_by!(key: "viewer"))
+    sign_in viewer, scope: :user
+    get admin_roles_path
+    assert_response :forbidden
+  end
+
   test "create non-system role and assign permissions" do
     membership = @membership
     admin = @org.roles.find_by!(key: "admin")

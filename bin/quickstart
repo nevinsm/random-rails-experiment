@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+APP_ROOT = File.expand_path("../..", __FILE__)
+Dir.chdir(APP_ROOT)
+
+ENV["RAILS_ENV"] ||= "development"
+
+cmds = [
+  ["bin/rails", "db:prepare"],
+  ["bin/rails", "db:seed"],
+]
+
+cmds.each do |(bin, task)|
+  puts "→ Running #{bin} #{task}"
+  system({"RAILS_ENV" => ENV["RAILS_ENV"]}, "#{bin} #{task}") || abort("Command failed: #{bin} #{task}")
+end
+
+puts "Quickstart complete. Demo org 'Acme Demo' and users created."
+
